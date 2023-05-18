@@ -190,14 +190,7 @@ class QChemErrorHandler(ErrorHandler):
             if self.qcinp.rem.get("thresh", "10") != "14":
                 self.qcinp.rem["thresh"] = "14"
                 actions.append({"thresh": "14"})
-            elif len(self.outdata.get("energy_trajectory")) > 1:
-                self.qcinp.molecule = self.outdata.get("molecule_from_last_geometry")
-                actions.append({"molecule": "molecule_from_last_geometry"})
-
-            elif str(self.qcinp.rem.get("geom_opt2", "none")) == "3":
-                self.qcinp.rem.pop("geom_opt2", None)
-                self.qcinp.geom_opt = None
-                actions.append({"geom_opt2": "deleted"})
+            
 
             elif self.outdata["version"] == "6" and self.qcinp.rem.get("geom_opt_driver", "libopt3") != "optimize":
                 if self.qcinp.geom_opt["coordinates"] == "redundant":
@@ -208,6 +201,15 @@ class QChemErrorHandler(ErrorHandler):
                 elif self.qcinp.geom_opt["coordinates"] == "delocalized":
                     self.qcinp.geom_opt["coordinates"] = "cartesian"  # pylint: disable=unsupported-assignment-operation
                     actions.append({"coordinates": "cartesian"})
+
+            elif len(self.outdata.get("energy_trajectory")) > 1:
+                self.qcinp.molecule = self.outdata.get("molecule_from_last_geometry")
+                actions.append({"molecule": "molecule_from_last_geometry"})
+
+            elif str(self.qcinp.rem.get("geom_opt2", "none")) == "3":
+                self.qcinp.rem.pop("geom_opt2", None)
+                self.qcinp.geom_opt = None
+                actions.append({"geom_opt2": "deleted"})
 
         elif "premature_end_FileMan_error" in self.errors:
             # Given defaults, the first two handlers will typically be skipped.
