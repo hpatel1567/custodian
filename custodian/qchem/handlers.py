@@ -193,12 +193,12 @@ class QChemErrorHandler(ErrorHandler):
             
 
             elif self.outdata["version"] == "6" and self.qcinp.rem.get("geom_opt_driver", "libopt3") != "optimize":
+                # if self.qcinp.geom_opt["coordinates"] == "redundant":
+                #     self.qcinp.geom_opt[  # pylint: disable=unsupported-assignment-operation
+                #         "coordinates"
+                #     ] = "delocalized"
+                #     actions.append({"coordinates": "delocalized"})
                 if self.qcinp.geom_opt["coordinates"] == "redundant":
-                    self.qcinp.geom_opt[  # pylint: disable=unsupported-assignment-operation
-                        "coordinates"
-                    ] = "delocalized"
-                    actions.append({"coordinates": "delocalized"})
-                elif self.qcinp.geom_opt["coordinates"] == "delocalized":
                     self.qcinp.geom_opt["coordinates"] = "cartesian"  # pylint: disable=unsupported-assignment-operation
                     actions.append({"coordinates": "cartesian"})
 
